@@ -1,4 +1,4 @@
-const fs = require("fs");
+ const fs = require("fs");
 const path = require('path');
 
 const DefinePlugin = require("webpack").DefinePlugin;
@@ -16,7 +16,8 @@ const package_json = JSON.parse(fs.readFileSync("./package.json"));
 
 module.exports = (env)=>{
     const VERSION = package_json.version;
-    const PROGRAM_NAME = "NeoAtlantis Slate";    
+    const PROGRAM_NAME = "NeoAtlantis Slate";
+    const APPNAME = "neoatlantis-slate";   
 
     if(!PROGRAM_NAME) throw Error("Unknown namespace specified.");
 
@@ -60,6 +61,7 @@ module.exports = (env)=>{
     const generic_plugins = [
         new DefinePlugin({
             VERSION: JSON.stringify(VERSION),
+            APPNAME: JSON.stringify(APPNAME),
             PROGRAM_NAME: JSON.stringify(PROGRAM_NAME),
             PROGRAM_PREFIX: JSON.stringify(program_prefix),
             DEV: JSON.stringify(is_dev),
