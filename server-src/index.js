@@ -1,5 +1,8 @@
 import api from "app/api";
-const debug = require("debug")(APPNAME+"/index.js");
+import "app/service";
+
+const path = require("path");
+const debug = require("app/debug")("index.js");
 
 const express = require("express");
 const app = express();
@@ -7,8 +10,14 @@ const app = express();
 
 
 debug("Setting up express.js");
-
 app.use("/api", api);
+
+debug("Setting up ui.");
+const static_path = path.join(
+	__dirname,
+    PROGRAM_PREFIX + "-" + (DEV?"web-dev":"web")
+);
+app.use(express.static(static_path));
 
 
 

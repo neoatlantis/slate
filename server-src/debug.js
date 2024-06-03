@@ -1,0 +1,1 @@
+module.exports = (path)=>require("debug")(APPNAME+'/'+path);
