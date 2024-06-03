@@ -1,2 +1,2 @@
 import template from "./__command_monitor";
-template("usb_monitor", "lsusb");
+template("pci_monitor", "lspci");
