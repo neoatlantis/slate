@@ -83,7 +83,7 @@ module.exports = (env)=>{
         watch: true,
         target: "node",
         output: {
-            filename: `${program_prefix}-librarian.${is_dev?'dev':'dist'}.js`,
+            filename: `${program_prefix}.${is_dev?'dev':'dist'}.js`,
             path: output_path,
         },
         externals: [
