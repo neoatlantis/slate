@@ -1,4 +1,4 @@
-import { register } from "app/lib/endpoints";
+ import { register } from "app/lib/endpoints";
 const crypto = require("crypto");
 
 
