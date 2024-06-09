@@ -1,3 +1,12 @@
+@font-face {
+    font-family: 'Sheikah';
+    src: url('./font/Sheikah.eot');
+    src: url('./font/Sheikah.woff2') format('woff2'), url('../font/Sheikah.woff') format('woff'), url('../font/Sheikah.ttf') format('truetype'), url('../font/Sheikah.svg#../font/Sheikah') format('svg'), url('../font/Sheikah.eot?#iefix') format('embedded-opentype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+
 body{
     margin: 0; padding: 0;
     font-size: 4vh;
@@ -9,3 +18,8 @@ body{
 .d-flex{display: flex}
 .justify-content-center { justify-content:center }
 .align-items-center { align-items:center; }
+
+.sheikah-font-style {
+    color: white;
+    text-shadow: 0 0 5px #0324ce, 0 0 10px #0324ce;
+}
