@@ -2,13 +2,13 @@
 const crypto = require("crypto");
 
 
-function pbkdf2({ password, salt, iterations }){
+function pbkdf2({ password, salt, iterations, length }){
 	return new Promise((resolve, reject)=>{
 		crypto.pbkdf2(
 			password,
 			salt,
 			iterations,
-			256,
+			length,
 			'sha512',
 			(err, value)=>{
 				if(err) return reject(err);
