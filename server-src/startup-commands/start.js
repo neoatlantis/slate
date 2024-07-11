@@ -1,9 +1,19 @@
-import api from "app/api";
+import path from "path";
 import express from "express";
+import api from "app/api";
 import "app/service";
+import { call } from "app/lib/endpoints";
+
+const debug = require("app/debug")("index.js");
 
 
 export default async function(args){
+
+	await call("service.pwmgr.engine.load", { seed_path: args.seed });
+
+
+
+
 	const app = express();
 
 

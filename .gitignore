@@ -2,3 +2,4 @@ node_modules
 *.sublime-workspace
 *-dev/
 *.dev.js
+seed.txt

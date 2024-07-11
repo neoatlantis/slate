@@ -1,3 +1,3 @@
 #!/bin/bash
 
-DEBUG=neoatlantis* supervisor neoatlantis-slate.dev.js
+DEBUG=neoatlantis* supervisor -- --expose-gc neoatlantis-slate.dev.js start -s ./seed.txt

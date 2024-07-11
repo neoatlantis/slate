@@ -4,7 +4,6 @@ import command_start from "app/startup-commands/start";
 import command_makeseed from "app/startup-commands/makeseed";
 
 
-const path = require("path");
 const debug = require("app/debug")("index.js");
 
 

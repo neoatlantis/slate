@@ -10,6 +10,7 @@
 			],
 			"file_exclude_patterns": [
 				"*.dev.*",
+				"seed.txt",
 			]
 		}
 	]

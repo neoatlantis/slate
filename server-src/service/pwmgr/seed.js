@@ -4,6 +4,7 @@ import { channel, call, register } from "app/lib/endpoints";
 import { serialize, deserialize } from "@ygoe/msgpack";
 
 const buffer = require("buffer");
+const debug = require("app/debug")("service/pwmgr/seed.js");
 
 /// #if DEV
 const ITERATIONS_LOWER_BOUND = 100000;
@@ -38,6 +39,7 @@ async function get_wrapping_key({ password, salt, iterations }){
 		"service.pwmgr.pbkdf2",
 		{ password, salt, iterations, length: 32 }
 	);
+	password = "";
 
 	let cryptokey = await crypto.subtle.importKey(
 		"raw",
@@ -48,6 +50,11 @@ async function get_wrapping_key({ password, salt, iterations }){
 	);
 
 	crypto.getRandomValues(key);
+
+	if(global.gc){
+		debug("Calling garbage collection...");
+		global.gc();
+	}
 
 	return cryptokey;
 }
@@ -60,6 +67,7 @@ async function get_new_wrapping_key({ password }){
 	const iterations = ITERATIONS_LOWER_BOUND * 2;
 
 	let wrapping_key = await get_wrapping_key({ password, salt, iterations });
+	password = "";
 	return { wrapping_key, salt, iterations };
 }
 
@@ -158,6 +166,7 @@ async function reencrypt_seed({ password_old, password_new, seed }){
 
 
 register("service.pwmgr.seed.make", make_seed);
+register("service.pwmgr.seed.decrypt", decrypt_seed);
 
 
 
