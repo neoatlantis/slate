@@ -8,12 +8,12 @@ Password managing using a central database is great but still subjects to a few
 issues:
 
 * Phishing: passwords are not domain-bound, and users may be tricked to enter
-  their passwords into malcious websites.
+  their passwords into malicious websites.
 * Single point of failure: Should a user leaks the master key, or should the
-  key be compromised in any other way, all passwords mananaged are vulnerable.
+  key be compromised in any other way, all passwords managed are vulnerable.
 
-I try to make some improvements in my strategy in achieving online security
-by writing this software.
+I try to make some improvements in my strategy of online data security by
+writing this software.
 
 ## Design
 

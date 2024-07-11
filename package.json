@@ -34,6 +34,7 @@
     "debug": "^4.3.4",
     "express": "^4.19.2",
     "lodash": "^4.17.21",
+    "readline-sync": "^1.4.10",
     "serialport": "^12.0.0",
     "usb": "^2.13.0"
   }

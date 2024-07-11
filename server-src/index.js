@@ -1,41 +1,20 @@
 import parse_args from "./cli-args";
-import api from "app/api";
-import "app/service";
+
+import command_start from "app/startup-commands/start";
+import command_makeseed from "app/startup-commands/makeseed";
+
 
 const path = require("path");
 const debug = require("app/debug")("index.js");
 
-const express = require("express");
-const app = express();
+
 
 
 const args = parse_args();
 
-console.log(args);
+switch(args.command){
+case "start": command_start(args); break;
+case "makeseed": command_makeseed(args); break;
 
 
-
-
-
-
-
-debug("Setting up express.js");
-app.use("/api", api);
-
-debug("Setting up ui.");
-const static_path = path.join(
-	__dirname,
-    PROGRAM_PREFIX + "-" + (DEV?"web-dev":"web")
-);
-app.use(express.static(static_path));
-
-
-
-
-const http = require("http").createServer(app);
-
-http.on("listening", ()=>{
-	debug(PROGRAM_NAME + " listening on 8080.");
-});
-
-http.listen(8080, "localhost");
+}

@@ -97,12 +97,14 @@ async function make_seed({ password }){
 
 
 
+
+
 async function __decrypt_seed({ password, seed }, extractable){
 	// Decrypt the seed and get a master crypto key.
 	//
 	// If we make the key extractable, it might be later imported into TPM...
 	// It's verified that raw export of the master key is simply THE secret in
-	// doing HMAC (with specified algorithm, of course).
+	// doing HMAC (with specified hashing algorithm, of course).
 
 	let seed_args = null;
 	try{
@@ -150,6 +152,12 @@ async function reencrypt_seed({ password_old, password_new, seed }){
 		master_key, wrapping_key, salt, iterations,
 	});
 }
+
+
+
+
+
+register("service.pwmgr.seed.make", make_seed);
 
 
 
