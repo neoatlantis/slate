@@ -28,6 +28,7 @@
   "dependencies": {
     "@ygoe/msgpack": "^1.0.3",
     "animejs": "^3.2.2",
+    "argparse": "^2.0.1",
     "broadcast-channel": "^7.0.0",
     "buttercup": "^7.7.1",
     "debug": "^4.3.4",

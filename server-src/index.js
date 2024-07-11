@@ -1,3 +1,4 @@
+import parse_args from "./cli-args";
 import api from "app/api";
 import "app/service";
 
@@ -6,6 +7,15 @@ const debug = require("app/debug")("index.js");
 
 const express = require("express");
 const app = express();
+
+
+const args = parse_args();
+
+console.log(args);
+
+
+
+
 
 
 
