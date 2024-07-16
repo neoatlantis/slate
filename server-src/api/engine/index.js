@@ -1,3 +1,4 @@
+import _ from "lodash";
 import { Router } from "express";
 import { channel, call } from "app/lib/endpoints";
 
@@ -5,14 +6,26 @@ import { channel, call } from "app/lib/endpoints";
 function setup_router(router){
 
 	router.all("/lock", async (req, res)=>{
-		channel("service.pwmgr.engine.lock").trigger();
-		res.end();
+		await call("service.pwmgr.engine.lock");
+		res.send({ done: true }).end();
+	});
+
+	router.post("/unlock", async (req, res)=>{
+		let error = null;
+		try{
+			await call("service.pwmgr.engine.unlock", {
+				password: _.get(req, "body.password", ""),
+			});
+		} catch(e){
+			error = e.toString();
+		}
+		let status = await call("service.pwmgr.engine.status");
+		res.send({ status, error }).end();
 	});
 
 	router.get("/", async (req, res)=>{
 		let status = await call("service.pwmgr.engine.status");
-		res.send({ status });
-		res.end();
+		res.send({ status }).end();
 	});
 
 

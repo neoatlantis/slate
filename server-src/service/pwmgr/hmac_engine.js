@@ -2,6 +2,8 @@ import _ from "lodash";
 import "./pbkdf2.js";
 import { channel, call, register } from "app/lib/endpoints";
 import { readFile } from "fs/promises";
+import buffer from "buffer";
+import deterministic_stringify from "json-stringify-deterministic";
 
 const debug = require("app/debug")("service/pwmgr/hmac_engine.js");
 
@@ -40,6 +42,46 @@ async function calculate_hmac({ data }){
 	return await crypto.subtle.sign("HMAC", master_key, data);
 }
 
+
+async function derive_key({ salt, usage, algorithm }){
+	if(!_.isString(usage) && !_.isNil(usage)){
+		throw Error("usage expected to be a buffer.")
+	}
+	if(_.isNil(usage)) usage = "";
+	if(!/^[\x20-\x7e]{0,}$/.test(usage)) {
+		throw Error("usage must be in ASCII.");
+	}
+
+	let seed = await calculate_hmac({ data: salt });
+
+	const secret_key = await crypto.subtle.importKey(
+    	'raw',
+    	seed,
+    	{ name: 'HKDF' },
+    	false,
+    	['deriveBits', 'deriveKey']
+  	);
+
+  	const hkdf_params = {
+    	name: 'HKDF',
+    	hash: 'SHA-256',
+    	salt,
+    	info: new Uint8Array(buffer.Buffer.from(deterministic_stringify({
+    		algorithm,
+    		usage,
+    	}), 'ascii')),
+  	};
+
+	return await crypto.subtle.deriveKey(
+	    hkdf_params,
+	    secret_key,
+	    algorithm,
+	    false,
+	    ['encrypt', 'decrypt', 'sign', 'verify', 'wrapKey', 'unwrapKey']
+	);
+}
+
+
 async function lock_engine(){
 	debug("Locking engine...");
 	master_key = null;
@@ -58,6 +100,7 @@ async function get_engine_status(){
 
 register("service.pwmgr.engine.load", load_seed);
 register("service.pwmgr.engine.hash", calculate_hmac);
+register("service.pwmgr.engine.derivekey", derive_key);
 register("service.pwmgr.engine.status", get_engine_status);
 register("service.pwmgr.engine.unlock", unlock_engine);
 register("service.pwmgr.engine.lock", lock_engine);

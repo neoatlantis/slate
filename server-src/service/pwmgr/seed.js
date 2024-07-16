@@ -22,6 +22,7 @@ const MASTER_KEY_ALGO = {
 
 
 async function get_wrapping_key({ password, salt, iterations }){
+
 	if(!_.isString(password) && !_.isBuffer(password)){
 		throw Error("KDF expects password a string or buffer.");
 	}
@@ -81,10 +82,8 @@ async function export_master_key_as_seed({
 		wrapping_key,
 		"AES-KW"
 	));
-
-	return buffer.Buffer.from(
-		serialize([exported_key, salt, iterations ])
-	).toString("base64");
+	let u8array = serialize([ exported_key, salt, iterations ]);
+	return buffer.Buffer.from(u8array).toString("base64");
 }
 
 
@@ -116,14 +115,17 @@ async function __decrypt_seed({ password, seed }, extractable){
 
 	let seed_args = null;
 	try{
-		seed_args = deserialize(buffer.Buffer.from(seed, "base64"));
+		let b64decode = buffer.Buffer.from(seed.toString(), "base64");
+		let seed_u8array = new Uint8Array(b64decode);
+		seed_args = deserialize(seed_u8array);
+		if(!_.isArray(seed_args) || _.size(seed_args) != 3) throw Error();
 	} catch(e){
 		throw Error("Failed reading seed.");
 	}
 
-	let exported_key = _.get(seed_args, 0),
-		salt = _.get(seed_args, 1),
-		iterations = _.get(seed_args, 2);
+	let exported_key = buffer.Buffer.from(_.get(seed_args, 0)),
+		salt 		 = buffer.Buffer.from(_.get(seed_args, 1)),
+		iterations   = _.get(seed_args, 2);
 
 	let wrapping_key = await get_wrapping_key({ password, salt, iterations });
 
@@ -139,6 +141,7 @@ async function __decrypt_seed({ password, seed }, extractable){
 		);
 		return master_key;
 	} catch(e){
+		debug(e);
 		throw Error("Cannot unwrap key. Password wrong?");
 	}
 }
@@ -186,6 +189,4 @@ async function test(){
 	console.log(await crypto.subtle.sign("HMAC", key0, buffer.Buffer.from('test')));
 	console.log(await crypto.subtle.sign("HMAC", key1, buffer.Buffer.from('test')));
 }
-
-//test();
 /// #endif
