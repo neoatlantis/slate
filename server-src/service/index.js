@@ -3,3 +3,4 @@
 import "./guardian";
 import "./pwmgr";
 import "./serial";
+import "./www-interface";

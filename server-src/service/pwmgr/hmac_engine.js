@@ -59,7 +59,7 @@ async function derive_key({ salt, usage, algorithm }){
     	seed,
     	{ name: 'HKDF' },
     	false,
-    	['deriveBits', 'deriveKey']
+    	['deriveKey']
   	);
 
   	const hkdf_params = {

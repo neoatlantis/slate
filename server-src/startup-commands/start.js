@@ -10,6 +10,7 @@ const debug = require("app/debug")("index.js");
 export default async function(args){
 
 	await call("service.pwmgr.engine.load", { seed_path: args.seed });
+	await call("service.www-interface.start");
 
 
 
