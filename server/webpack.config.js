@@ -124,19 +124,23 @@ module.exports = (env)=>{
     );
 
 
-    function web_template(scriptname, pagename){ return {
-        entry: path.resolve(__dirname, "web-src", scriptname),
-        mode: is_dev?'development':'production',
+    function __template(srcpath, dstpath, scriptname, pagename){ return {
+        entry: path.join(srcpath, scriptname),
+        mode: (
+            is_dev
+            ?'development'
+            :'production'
+        ),
         watch: true,
         output: {
             filename: scriptname,
-            path: web_dstpath,
+            path: dstpath,
         },
         resolve: {
             alias: {
-                app: web_srcpath,
+                app: srcpath,
                 common: common_srcpath,
-                sfc: path.resolve(web_srcpath, "vue"),
+                sfc: path.join(srcpath, "vue"),
             },
             fallback: {
                 "fs": false,
@@ -149,23 +153,36 @@ module.exports = (env)=>{
         plugins: [
             new VueLoaderPlugin(),
             new HtmlWebpackPlugin({
-                template: path.join(web_srcpath, pagename),
-                filename: path.join(web_dstpath, pagename),
+                template: path.join(srcpath, pagename),
+                filename: path.join(dstpath, pagename),
                 scriptLoading: "module",
             }),
             new CopyPlugin({
                 patterns: [
                     {
-                        from: path.join(web_srcpath, "static"),
-                        to:   path.join(web_dstpath, "static"),
+                        from: path.join(srcpath, "static"),
+                        to:   path.join(dstpath, "static"),
                     }
                 ]
             }),
         ].concat(generic_plugins),
-
     } }
 
-    ret.push(web_template("page.index.js", "index.html"));
+    function web_template(scriptname, pagename){
+        return __template(web_srcpath, web_dstpath, scriptname, pagename);
+    }
+
+    function web_extension_template(scriptname, pagename){
+        return __template(webext_srcpath, webext_dstpath, scriptname, pagename);
+    }
+
+
+
+    [
+        web_template("page.index.js", "index.html"),
+    ].forEach(e=>ret.push(e));
+
+    console.log(ret);
 
     return ret;
 };

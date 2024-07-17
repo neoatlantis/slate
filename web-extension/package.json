@@ -1,10 +1,11 @@
 {
-  "name": "neoatlantis-slate",
+  "name": "neoatlantis-slate-webext",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "webpack"
+    "dev": "webpack",
+    "dist": "webpack --env production=1"
   },
   "keywords": [],
   "author": "NeoAtlantis",
