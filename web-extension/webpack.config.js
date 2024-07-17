@@ -55,11 +55,6 @@ module.exports = (env)=>{
                 }
             ],
         },
-        {
-            test: /\.ts$/,
-            use: 'ts-loader',
-            exclude: /node_modules/,
-        },
 
     ];
 
@@ -82,50 +77,16 @@ module.exports = (env)=>{
 
     let ret = [];
 
-    ret.push({
-        entry: path.resolve(__dirname, "server-src", 'index.js'),
-        mode: is_dev?'development':'production',
-        watch: true,
-        target: "node",
-        output: {
-            filename: `${program_prefix}.${is_dev?'dev':'dist'}.js`,
-            path: output_path,
-        },
-        externals: [
-            nodeExternals({
-                allowlist: [
-                    "debug",
-                    "lodash",
-                    "events",
-                    "sweetalert",
-                    "vue-i18n",
-                    "@vueuse/core",
-                    "@vueuse/components",
-                ],
-            }),
-            
-        ],
-        resolve: {
-            alias: {
-                app: path.resolve(__dirname, "server-src"),
-                common: common_srcpath,
-            },
-        },
-        module: {
-            rules: generic_rules, 
-        },
-        plugins: generic_plugins,
-    });
-
-    let webext_srcpath = path.join(__dirname, "web-extension-src");
+    let webext_srcpath = path.join(__dirname, "src");
     let webext_dstpath = path.join(
-        __dirname, "web-extension");
+        __dirname,
+        (is_dev?"dev":"dist"));
 
 
     function __template(srcpath, dstpath, scriptname, pagename){ return {
         entry: path.join(srcpath, scriptname),
         mode: (
-            (is_dev && dstpath.indexOf("web-extension")<0)
+            false
             ?'development'
             :'production'
         ),
@@ -160,7 +121,8 @@ module.exports = (env)=>{
                     {
                         from: path.join(srcpath, "static"),
                         to:   path.join(dstpath, "static"),
-                    }
+                    },
+                    "src/manifest.json",
                 ]
             }),
         ].concat(generic_plugins),
@@ -173,7 +135,8 @@ module.exports = (env)=>{
 
 
     [
-        web_template("page.index.js", "index.html"),
+        web_template("background.js", "background.html"),
+        web_template("options.js", "options.html"),
     ].forEach(e=>ret.push(e));
 
     console.log(ret);
