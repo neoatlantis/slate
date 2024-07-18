@@ -137,6 +137,7 @@ module.exports = (env)=>{
     [
         web_template("background.js", "background.html"),
         web_template("options.js", "options.html"),
+        web_template("popup.js", "popup.html"),
     ].forEach(e=>ret.push(e));
 
     console.log(ret);

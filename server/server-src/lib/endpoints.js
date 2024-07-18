@@ -19,20 +19,23 @@ function call(name, ...args){
 }
 
 class Channel {
-	#channel;
 	#name;
+	#listeners;
 	constructor(name){
 		this.#name = name;
-		this.#channel = new BroadcastChannel(name);
+		this.#listeners = [];
+		
 	}
 
 	on(func){
-		this.#channel.addEventListener('message', func);
+		this.#listeners.push(func);
 	}
 
 	trigger(data){
-		debug("Event triggered: " + this.#name);
-		this.#channel.postMessage(data);
+		debug("Recevied event:" + this.#name);
+		this.#listeners.forEach((func)=>{
+			func(data);
+		});
 	}
 }
 

@@ -18,7 +18,8 @@
         "page": "options.html"
     },
     "action": {
-        "default_title": "NeoAtlantis Slate"
+        "default_title": "NeoAtlantis Slate",
+        "default_popup": "popup.html"
     },
     "browser_specific_settings": {
         "gecko": {
