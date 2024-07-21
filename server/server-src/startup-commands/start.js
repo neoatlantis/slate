@@ -1,8 +1,11 @@
 import path from "path";
+import { Server as SocketIOServer } from "socket.io";
 import express from "express";
 import api from "app/api";
 import "app/service";
-import { call } from "app/lib/endpoints";
+import { call, register } from "app/lib/endpoints";
+import on_connection from "app/socketio";
+import http from "http";
 
 const debug = require("app/debug")("index.js");
 
@@ -14,8 +17,9 @@ export default async function(args){
 
 
 
-
 	const app = express();
+	const server = http.createServer(app);
+	const io = new SocketIOServer(server);
 
 
 	debug("Setting up express.js");
@@ -31,12 +35,16 @@ export default async function(args){
 
 
 
-	const http = require("http").createServer(app);
-
-	http.on("listening", ()=>{
+	
+	server.on("listening", ()=>{
 		debug(PROGRAM_NAME + " listening on 8080.");
 	});
 
-	http.listen(8080, "localhost");
+	io.on("connection", on_connection);
+	register("socketio.broadcast", function(){
+		io.emit.apply(this, [...arguments]);
+	});
+
+	server.listen(8080, "localhost");
 
 }

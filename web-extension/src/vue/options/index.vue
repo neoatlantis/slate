@@ -21,6 +21,8 @@
 </div></template>
 <script>
 import _ from "lodash";
+import browser from "common/browser";
+
 export default {
 	mounted(){
 		this.init();

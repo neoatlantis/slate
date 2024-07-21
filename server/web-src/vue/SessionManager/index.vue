@@ -21,6 +21,7 @@
 import _ from "lodash";
 import api from "app/api";
 import PasswordInput from "sfc/controls/PasswordInput.vue";
+import socket from "app/socketio";
 
 
 export default {

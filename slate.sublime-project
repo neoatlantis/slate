@@ -7,6 +7,7 @@
 				"dist/",
 				"node_modules",
 				"*-dev",
+				"dev/",
 			],
 			"file_exclude_patterns": [
 				"*.dev.*",

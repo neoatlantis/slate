@@ -38,6 +38,7 @@
     "lodash": "^4.17.21",
     "readline-sync": "^1.4.10",
     "serialport": "^12.0.0",
+    "socket.io": "^4.7.5",
     "usb": "^2.13.0"
   }
 }
